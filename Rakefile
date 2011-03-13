@@ -37,13 +37,10 @@ end
 namespace :cover_me do
   require 'cover_me'
   
-  task :report do
-    puts "Root #{CoverMe.config.project.root}"
-    puts "File Pattern #{CoverMe.config.file_pattern}"
-    
+
     Rake::Task['test'].invoke
     CoverMe.complete!
-  end
+
   
 end
 
