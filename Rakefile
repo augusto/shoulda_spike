@@ -34,14 +34,10 @@ Rake::TestTask.new(:test) do |test|
 end
 
 
-namespace :cover_me do
+task :coverage do
   require 'cover_me'
-  
-
-    Rake::Task['test'].invoke
-    CoverMe.complete!
-
-  
+  Rake::Task['test'].invoke
+  CoverMe.complete!
 end
 
 task :default => :test
