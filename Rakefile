@@ -33,11 +33,42 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+
+namespace :cover_me do
+  require 'cover_me'
+  CoverMe.config do |c|
+      # where is your project's root:
+      c.project.root = Dir.getwd
+
+      # what files are you interested in coverage for:
+      c.file_pattern = /(#{CoverMe.config.project.root}\/test\/test.+\.rb)/i 
+
+      # where do you want the HTML generated:
+      c.html_formatter.output_path = File.join(CoverMe.config.project.root, 'coverage') 
+
+      # what do you want to happen when it finishes:
+      # c.at_exit = Proc.new {
+      #   if CoverMe.config.formatter == CoverMe::HtmlFormatter
+      #     index = File.join(CoverMe.config.html_formatter.output_path, 'index.html')
+      #     if File.exists?(index)
+      #       `open #{index}`
+      #     end
+      #   end
+      # } 
+  end
+  
+  task :report do
+    CoverMe.complete!
+  end
+  
+end
+
+task :test do
+  Rake::Task['cover_me:report'].invoke
+end
+
+task :spec do
+  Rake::Task['cover_me:report'].invoke
 end
 
 task :default => :test
