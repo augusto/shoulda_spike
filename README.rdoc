@@ -1,19 +1,14 @@
 = shoulda-spike
 
-Description goes here.
+The bowling kata done with what I consider to be [shoulda](https://github.com/thoughtbot/shoulda) (but I might be wrong). 
+I also used this to learn / test how to build a stand alone ruby application. During this, I found [Jeweler](https://github.com/technicalpickles/jeweler) which already sets up a simple directory structure for a stand alone project with git integration, shoulda, rcov, bundler and some nice rake tasks. 
 
-== Contributing to shoulda-spike
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+Since rcov doesn't work with ruby 1.9, I removed rcov and used [cover_me](https://github.com/markbates/cover_me). In order to use cover_me, I had to add another rake task. To execute the task run `rake coverage`. In osx, it should also open a browser with the stats. This is the code of the task
 
-== Copyright
+    task :coverage do
+      require 'cover_me'
+      Rake::Task['test'].invoke
+      CoverMe.complete!
+    end
 
-Copyright (c) 2011 Augusto Rodriguez. See LICENSE.txt for
-further details.
-
+The other bit needed to run cover_me, is to add `require 'cover_me'` at the very first line of the test helper, in my case in [test/helper.rb](https://github.com/augusto/shoulda_spike/blob/master/test/helper.rb)
